@@ -1,5 +1,6 @@
 # spec/spec_helper.rb
-# require 'capybara/rspec'
+require 'capybara/rspec'
+require 'selenium-webdriver'
 
 # Capybara.configure do |config|
 #   config.default_driver = :selenium_firefox # or your preferred driver
@@ -23,11 +24,6 @@
 #   end
 # end
 
-
-# spec/spec_helper.rb
-require 'capybara/rspec'
-require 'selenium-webdriver'
-
 Capybara.configure do |config|
   config.default_driver = :selenium_remote
   config.default_max_wait_time = 30 # Increase wait time for cloud grid
@@ -36,6 +32,8 @@ end
 
 # Register the remote driver for LambdaTest
 Capybara.register_driver :selenium_remote do |app|
+  thread_number = ENV['TEST_ENV_NUMBER'].to_i.zero? ? 1 : ENV['TEST_ENV_NUMBER'].to_i
+
   capabilities = Selenium::WebDriver::Remote::Capabilities.new
   capabilities['browserName'] = 'Firefox'
   capabilities['browserVersion'] = 'latest'
@@ -43,9 +41,9 @@ Capybara.register_driver :selenium_remote do |app|
     'platformName' => 'Windows 11',
     'resolution' => '1920x1080',
     'build' => 'RSpec Login Tests',
-    'name' => 'User Login Feature',
-    'username' => USERNAME,
-    'accessKey' => ACCESS_KEY,
+    'name' => "User Login Feature #{thread_number}",
+    'username' => LT_USERNAME,
+    'accessKey' => LT_ACCESS_KEY,
     'visual' => true,
     'video' => true,
     'network' => true
@@ -54,7 +52,7 @@ Capybara.register_driver :selenium_remote do |app|
   Capybara::Selenium::Driver.new(
     app,
     browser: :remote,
-    url: "https://#{USERNAME}:#{ACCESS_KEY}@#{GRID_URL}",
+    url: "https://#{LT_USERNAME}:#{LT_ACCESS_KEY}@#{GRID_URL}",
     capabilities: capabilities # Use only :options, no :capabilities
   )
 end

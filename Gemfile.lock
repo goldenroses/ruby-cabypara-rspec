@@ -19,6 +19,9 @@ GEM
     nokogiri (1.15.7)
       mini_portile2 (~> 2.8.2)
       racc (~> 1.4)
+    parallel (1.26.3)
+    parallel_tests (4.7.1)
+      parallel
     public_suffix (5.1.1)
     racc (1.8.1)
     rack (3.1.12)
@@ -53,6 +56,7 @@ PLATFORMS
 
 DEPENDENCIES
   capybara (~> 3.35)
+  parallel_tests
   rspec (~> 3.10)
   selenium-webdriver (~> 4.8)
 
